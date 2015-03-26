@@ -1,0 +1,15 @@
+---
+layout: post
+title: How to properly restore a backed-up Eclipse workspace
+date: '2012-05-14T19:08:00.000+02:00'
+author: Sven Bendel
+tags:
+- Linux
+- Eclipse
+- Ubuntu
+modified_time: '2012-05-14T19:08:06.363+02:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-920803862853256901
+blogger_orig_url: http://ubuntudroid.blogspot.com/2012/05/how-to-properly-restore-backed-up.html
+---
+
+<i>This morning my Ubuntu crashed while I was working in Eclipse. Unfortunately this also corrupted my workspace state. But, no problem - I had a backup. However, restoring the backup wasn't as easy as I had thought...</i><br /><br />I had backed up my home partition with deja-dup - the built in backup solution in Ubuntu. After the recovery deja-dup's status dialog gave me quite a few error messages stating that SVN related files couldn't be restored due to missing permissions. I assume, this was due to the fact, that rabbitcvs, the tool I access my SVN repositories with besides Eclipse, still was holding locks on these files.<br /><br />Stopping rabbitvcs's status checker service didn't help. So I fired up deja-dup's recovery dialog again by right clicking on the folder and choosing the "Revert to previous version..." entry. After the dialog appeared (and deja-dup knew the path of the folder it should recover) I renamed the workspace folder (could also have deleted it, but just in case...) and let deja-dup do it's job. And guess what, it worked! As deja-dup doesn't seem to just restore the changed files, but everything, that is under the marked folder, there is also no performance loss in acting like this.<br /><br />"Easy-peasy!" you may shout out now, but for me it took nearly 10 minutes to work this out.

@@ -1,0 +1,14 @@
+---
+layout: post
+title: How to force Eclipse to recognize an Android phone on Ubuntu
+date: '2010-03-20T13:00:00.003+01:00'
+author: Sven Bendel
+tags:
+- Android
+- Ubuntu
+modified_time: '2013-04-21T18:51:54.096+02:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-6756214105230424337
+blogger_orig_url: http://ubuntudroid.blogspot.com/2010/03/how-to-make-eclipse-to-recognize.html
+---
+
+<div xmlns="http://www.w3.org/1999/xhtml"><div style="font-family: Arial,Helvetica,sans-serif;"><i>When I started developing Android application under Ubuntu, I had the problem, that the phone wasn't recognized by the Android plugin for Eclipse. Luckily there is an easy solution to this!</i></div><br /><div style="font-family: Arial,Helvetica,sans-serif;">Simply plug in the phone and then kill and restart the adb server by opening a terminal and executing</div><br /><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">sudo ./adb kill-server<br />sudo ./adb start-server</span><br /><br /><div style="font-family: Arial,Helvetica,sans-serif;">in your Android-SDK tools directory (e.g. /home/yourname/Android/android-sdk-linux_x86-1.6_r1/tools depending on where you've installed the SDK) as root. Unfortunately you have to enter this workaround only lasts for one session meaning that you have to reenter this after every boot.</div><div style="font-family: Arial,Helvetica,sans-serif;">I wrote a little bash-script, to make it easier. You can copy'n'paste this from here and save it in a file called <i>restart_adb.sh</i> in a folder named <i>bin</i> in your home directory.</div><div style="font-family: Arial,Helvetica,sans-serif;"><br /></div><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">#usr/bin/sh<br />cd /home/sven/Android/android-sdk-linux_x86-1.6_r1/tools<br />sudo ./adb kill-server<br />sudo ./adb start-server<br />exit 0</span><br /><br /><div style="font-family: Arial,Helvetica,sans-serif;">This will allow you to simply execute</div><br /><span style="font-family: Arial,Helvetica,sans-serif;"><span style="font-family: &quot;Courier New&quot;,Courier,monospace;">restart_adb</span></span><br /><br /><div style="font-family: Arial,Helvetica,sans-serif;">in your terminal to run it without having to navigate into the sdk's tools directory.<br /><br /><b>Edit:</b> This is not necessary when using Ubuntu 10.04 which recognizes at least the HTC Hero without any problems. </div></div>

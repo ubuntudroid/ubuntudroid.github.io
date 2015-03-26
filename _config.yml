@@ -1,0 +1,23 @@
+# Site settings
+title: Yet another programmer's blog
+email: ubuntudroid@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  This blog mainly consists of topics regarding programming and tooling I personally
+  consider as having the potential to be of public interest. The
+  focus lies on Android and Linux, but I may randomly also write posts about other
+  topics. The blog has been formerly hosted on ubuntudroid.blogspot.com.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "ubuntudroid.github.io" # the base hostname & protocol for your site
+twitter_username: ubuntu_droid
+github_username:  ubuntudroid
+
+# Build settings
+markdown: kramdown
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"

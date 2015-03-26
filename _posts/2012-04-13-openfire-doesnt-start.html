@@ -1,0 +1,14 @@
+---
+layout: post
+title: Openfire doesn't start
+date: '2012-04-13T13:41:00.001+02:00'
+author: Sven Bendel
+tags:
+- Ubuntu
+- XMPP
+modified_time: '2012-04-13T13:45:37.428+02:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-2147125934188732663
+blogger_orig_url: http://ubuntudroid.blogspot.com/2012/04/openfire-doesnt-start.html
+---
+
+<i>Just downloaded the latest release of Ignite Realtime's Openfire XMPP server. They also provide a .deb package besides .tar.gz, so I chose to use it. After installing I tried to start the server by executing</i> <br /><br /><code>/etc/init.d/openfire start</code><br /><br /><i>But nothing happened.</i><br /><br /><br />So I further inspected the code of the script and found out, that it only checks for old Java versions:<br /><br /><code>if [ -z $JAVA_HOME ]<br />then<br />        t=/usr/lib/jvm/java-1.5.0-sun &amp;&amp; test -d $t &amp;&amp; JAVA_HOME=$t<br />        t=/usr/lib/jvm/java-6-sun &amp;&amp; test -d $t &amp;&amp; JAVA_HOME=$t<br />fi</code><br /><br />But my Java version java-7-oracle was missing. So I simply added it at the end:<br /><br /><code>if [ -z $JAVA_HOME ]<br />then<br />        t=/usr/lib/jvm/java-1.5.0-sun &amp;&amp; test -d $t &amp;&amp; JAVA_HOME=$t<br />        t=/usr/lib/jvm/java-6-sun &amp;&amp; test -d $t &amp;&amp; JAVA_HOME=$t<br />t=/usr/lib/jvm/java-7-oracle &amp;&amp; test -d $t &amp;&amp; JAVA_HOME=$t<br />fi</code><br /><br />which allowed the script to run properly.

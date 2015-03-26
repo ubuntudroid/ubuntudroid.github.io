@@ -1,0 +1,71 @@
+---
+layout: post
+title: Handling LTR text in RTL environments
+date: '2015-01-11T14:14:00.004+01:00'
+author: Sven Bendel
+tags:
+- Java
+- Android
+modified_time: '2015-01-11T14:32:50.026+01:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-2035177433889771177
+blogger_orig_url: http://ubuntudroid.blogspot.com/2015/01/handling-ltr-text-in-rtl-environments.html
+---
+
+<i>Recently we finally managed to solve the layouting problems in our Android app caused by RTL user names in LTR language environments. Here's how.</i>
+<br /><i><br /></i>But first things first: what is RTL/LTR? Most languages including English are written from left to right (LTR). However there are some languages - Arabic and Hebrew being the most important of them - which are written from right to left (RTL).
+This of course has implications on layouting especially in mixed environments.
+<br />
+<br />Consider an Android device whose language is set to English. And now there's an app displaying some user names in a simple ListView. One of those user names is written in Hebrew. This is what happens:
+<br />
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Arthur, 42 y/o</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Trillian, 39 y/o</span>
+<br />
+<div style="text-align: right;"><span style="background-color: #fffff1; font-size: 14px; line-height: 19.6000003814697px;"><span style="font-family: Courier New, Courier, monospace;">&nbsp; عليّ, y/o 56</span></span>
+</div><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Ford Prefect, 111 y/o</span>
+<br />
+<br />Somewhat ugly, huh? It doesn't fit into the overall layout and the complete line is LTR instead of just the name. Why is that?
+<br />
+<br />Trying to display RTL strings in LTR environments isn't as simple as one would think. Especially on Android. The reason for this is the automatic detections algorithm Android OS uses to render TextViews with RTL text. During the layouting phase of a TextView
+Android checks the first character of the TextView's String content. Depending on the position of this character in the unicode table Android decides whether to lay out the TextView according to RTL or LTR. This mainly has implications on the gravity
+which is applied to the TextViews content and how some&nbsp;<span style="font-family: Courier New, Courier, monospace;">layout_*</span> parameters (like <span style="font-family: Courier New, Courier, monospace;">align_parentLeft/Right</span><span style="font-family: inherit;">)</span> are
+interpreted leading to the phenomenon depicted above. What we actually want to achieve is that the LTR text is still rendered from left-to-right (as this is how the name is written in it's original form), but with left gravity. To make things a little
+more interesting we're also appending an LTR string containing the user's age.
+<br />
+<br />Okay, that's enough theory for now - how did we actually solve the problem? Simply by taking a close look at Android's LTR detection algorithm and using some text layout direction control characters. Take a look at this code snippet:
+<br />
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; /**</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* Reformat the String as LTR to ensure that it is laid out from</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* left to right, but it doesn't affect overall layouting of</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* TextViews etc..</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;*/</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; public static String makeLtr ( String string ) {</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp;if (checkRtl(string)) {</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /* prepend the string with an LTR control sign (so</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;that Android's RTL check returns false) and an RTL</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;control sign (so that the string itself is printed in</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RTL) and append an LTR control sign (so that if we</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;append another String it is laid out LTR). */</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return "\u200E" + "\u200F" + string + "\u200E";</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; } else {</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return string;</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; }</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; }</span>
+<br /><span style="font-family: Courier New, Courier, monospace;"><br /></span><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; /**</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* Check if the given String is probably written in RTL by</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* checking if the very first character is within the range of</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;* RTL unicode characters.</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp;*/</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; public static boolean checkRtl ( String string ) {</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; if (TextUtils.isEmpty(string)) {</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return false;</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; }</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; char c = string.charAt(0);</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; &nbsp; &nbsp; return c &gt;= 0x590 &amp;&amp; c &lt;= 0x6ff;</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; }</span>
+<br /><span style="font-family: Courier New, Courier, monospace;"><br /></span><span style="font-family: inherit;">By applying </span><span style="font-family: Courier New, Courier, monospace;">makeLtr()&nbsp;</span><span style="font-family: inherit;">to every user name String we can be sure, that the TextView is laid out correctly, that is like so:</span>
+<br /><span style="font-family: inherit;"><br /></span><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Arthur, 42 y/o</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Trillian, 39 y/o</span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp;&nbsp;</span><span style="background-color: #fffff1; font-family: 'Courier New', Courier, monospace; font-size: 14px; line-height: 19.6000003814697px; text-align: left;">عليّ(RTL!), 56 y/o (yeah, LTR and gravity left!)<!-----><!-----></span>
+<!----->
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Ford Prefect, 111 y/o</span>
+<br /><span style="font-family: Courier New, Courier, monospace;"><br /></span><span style="font-family: inherit;">The TextView itself doesn't have to be modified in any way. Of course this little trick can also be applied to other programming languages and frameworks or LTR Strings in RTL environments just by encapsulating the String in the corresponding unicode control characters.</span>

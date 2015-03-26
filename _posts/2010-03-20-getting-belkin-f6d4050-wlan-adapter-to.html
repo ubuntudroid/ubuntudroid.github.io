@@ -1,0 +1,14 @@
+---
+layout: post
+title: Getting Belkin F6D4050 WLAN-Adapter to work under Ubuntu
+date: '2010-03-20T17:11:00.011+01:00'
+author: Sven Bendel
+tags:
+- Hardware
+- Ubuntu
+modified_time: '2010-03-20T17:52:30.361+01:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-3437685482582158115
+blogger_orig_url: http://ubuntudroid.blogspot.com/2010/03/getting-belkin-f6d4050-wlan-adapter-to.html
+---
+
+<div xmlns="http://www.w3.org/1999/xhtml"><div style="font-family: Arial,Helvetica,sans-serif;"><i>I recently bought a new WLAN USB stick for my laptop hoping, that it would be recognized by Ubuntu 9.10 out of the box (I know, I know... I could've looked into Ubuntu's hardware database, but this came to my mind the moment I arrived at the shop...)</i>. <i>Needless to say it did not. With my old stick I did some</i> <i>hacking with blacklisting drivers etc. pp.. But this time I decided to use the popular ndiswrapper.</i></div><div style="font-family: Arial,Helvetica,sans-serif;"><br /></div><div style="font-family: Arial,Helvetica,sans-serif;">And I have to admit, that this was a real got choice! It's so easy (at least if you are lucky - I also read about people having more problems with it afterwards then before, so as always: don't forget to backup your system^^). Here we go:</div><br /><span style="font-family: Courier New;">$sudo aptitute install ndisgtk<br />$sudo ndisgtk</span><br /><br /><div style="font-family: Arial,Helvetica,sans-serif;">After having installed and started ndisgtk, a gtk frontend of ndiswrapper, simply click on "add" and search for the appropriate *.inf file on the installation CD. It's the one located in the XP_x64 folder for 64 bit machines or in the XP_2k folder for 32 bit machines respectively. After having applied these settings, the only thing left to do is rebooting and we're done! Your stick should now work like a charm.</div></div>

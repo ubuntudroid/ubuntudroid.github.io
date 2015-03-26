@@ -1,0 +1,15 @@
+---
+layout: post
+title: 'SVN commit problem: no working copy'
+date: '2012-05-26T12:13:00.000+02:00'
+author: Sven Bendel
+tags:
+- CVS
+- Linux
+- Windows
+modified_time: '2012-05-26T12:13:53.688+02:00'
+blogger_id: tag:blogger.com,1999:blog-932652460086490809.post-3011445483863594722
+blogger_orig_url: http://ubuntudroid.blogspot.com/2012/05/svn-commit-problem-no-working-copy.html
+---
+
+<i>During developing I often use SVN as CVS. However, sometimes when trying to commit I get an error message stating that a specific folder/file is no working copy which leads to a failure of the commit process.</i><br /><br />But don't worry: it is easy to fix in a few steps:<br /><b> </b><br /><ol><li>Create a copy of the affected folder and move it to somewhere outside your working copy.</li><li>Clear the copied folder of all SVN-references (e.g by deleting all <i>.svn</i> folders).</li><li>SVN-delete the affected folder (either be SVN CLI or from the context-menu when using tools like Tortoise/Rabbit-SVN) - if the folder contains subfolders make sure to also SVN-delete these as the SVN-delete command is not recursive.</li><li>Commit the deleted (and only the deleted!) folder.</li><li>Delete the folder from the filesystem.</li><li>Copy the aforementioned copied folder back into the working copy.</li><li>SVN-add the folder.</li><li>Commit.</li></ol>That should make sure, that you're working copy is usable again. Another way would be to just SVN-revert the folder to the last revision, but thus you would loose all changes you've made since the last commit/update.
