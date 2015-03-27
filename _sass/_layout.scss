@@ -141,6 +141,11 @@
     width:         calc(45% - (#{$spacing-unit} / 2));
 }
 
+.footer-attribution {
+    font-size: $small-font-size;
+    color: $grey-color;
+}
+
 @include media-query($on-laptop) {
     .footer-col-1,
     .footer-col-2 {
