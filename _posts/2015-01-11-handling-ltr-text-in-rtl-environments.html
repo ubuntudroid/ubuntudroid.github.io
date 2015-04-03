@@ -20,7 +20,7 @@ This of course has implications on layouting especially in mixed environments.
 <br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Arthur, 42 y/o</span>
 <br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Trillian, 39 y/o</span>
 <br />
-<div style="text-align: right;"><span style="background-color: #fffff1; font-size: 14px; line-height: 19.6000003814697px;"><span style="font-family: Courier New, Courier, monospace;">&nbsp; عليّ, y/o 56</span></span>
+<div style="text-align: right;"><span style="font-size: 14px; line-height: 19.6000003814697px;"><span style="font-family: Courier New, Courier, monospace;">&nbsp; عليّ, y/o 56</span></span>
 </div><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Ford Prefect, 111 y/o</span>
 <br />
 <br />Somewhat ugly, huh? It doesn't fit into the overall layout and the complete line is LTR instead of just the name. Why is that?
@@ -65,7 +65,7 @@ more interesting we're also appending an LTR string containing the user's age.
 <br /><span style="font-family: Courier New, Courier, monospace;"><br /></span><span style="font-family: inherit;">By applying </span><span style="font-family: Courier New, Courier, monospace;">makeLtr()&nbsp;</span><span style="font-family: inherit;">to every user name String we can be sure, that the TextView is laid out correctly, that is like so:</span>
 <br /><span style="font-family: inherit;"><br /></span><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Arthur, 42 y/o</span>
 <br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Trillian, 39 y/o</span>
-<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp;&nbsp;</span><span style="background-color: #fffff1; font-family: 'Courier New', Courier, monospace; font-size: 14px; line-height: 19.6000003814697px; text-align: left;">عليّ(RTL!), 56 y/o (yeah, LTR and gravity left!)<!-----><!-----></span>
+<br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp;&nbsp;</span><span style="font-family: 'Courier New', Courier, monospace; font-size: 14px; line-height: 19.6000003814697px; text-align: left;">عليّ(RTL!), 56 y/o (yeah, LTR and gravity left!)<!-----><!-----></span>
 <!----->
 <br /><span style="font-family: Courier New, Courier, monospace;">&nbsp; &nbsp; Ford Prefect, 111 y/o</span>
 <br /><span style="font-family: Courier New, Courier, monospace;"><br /></span><span style="font-family: inherit;">The TextView itself doesn't have to be modified in any way. Of course this little trick can also be applied to other programming languages and frameworks or LTR Strings in RTL environments just by encapsulating the String in the corresponding unicode control characters.</span>
